@@ -20,7 +20,7 @@ K8s/jenkins-server/
 └── jenkins-server/
     └── kustomize/
         ├── kustomization.yml
-        ├── jenkins-deployment.yml                # Jenkins LTS container
+        ├── jenkins-deployment.yml         # Jenkins LTS container
         ├── jenkins-docker-deployment.yml  # dind container
         ├── jenkins-docker-service.yml     # ClusterIP — dind port 2376
         ├── jenkins-service.yml            # NodePort 30081 — Jenkins UI
