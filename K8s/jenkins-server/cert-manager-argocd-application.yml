@@ -7,7 +7,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/allenjoey/alpha.git
+    repoURL: https://github.com/allenjoey/delta.git
     targetRevision: main
     path: K8s/jenkins-server/cert-manager/kustomize
   destination:
