@@ -1,0 +1,27 @@
+---
+
+- hosts: localhost
+  gather_facts: false
+
+  vars:
+    image_name: docker-nginx
+    image_tag: latest
+
+  tasks:
+    - name: Build the nginx image
+      community.docker.docker_image:
+        build:
+          path: ./nginx
+          pull: false
+        name: '{{ image_name }}'
+        tag: '{{ image_tag }}'
+        source: build
+
+    - name: Run the docker-nginx image
+      community.docker.docker_container:
+        name: docker-nginx
+        image: '{{ image_name }}:{{ image_tag }}'
+        state: started
+        published_ports:
+          - 8180:8180
+...

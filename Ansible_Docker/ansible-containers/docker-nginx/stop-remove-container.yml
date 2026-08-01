@@ -1,0 +1,11 @@
+---
+
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - name: Stop and remove the container
+    community.docker.docker_container:
+      name: docker-nginx
+      state: absent
+...
