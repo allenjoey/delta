@@ -8,7 +8,7 @@ A collection of DevOps automation and orchestration tooling, covering CI/CD on K
 
 | Directory | What it does |
 |---|---|
-| [`K8s/jenkins-server`](K8s/jenkins-server) | Kustomize-based Jenkins deployment (with Docker-in-Docker) on k3s, managed via ArgoCD or standalone shell scripts. Includes TLS via cert-manager and Traefik. |
+| [`K8s/jenkins-server`](K8s/jenkins-server) | Kustomize-based Jenkins deployment (with Docker-in-Docker) on k3s, managed via shell scripts. Includes TLS via cert-manager and Traefik. |
 | [`Ansible_OS_Patching/Linux_Patching`](Ansible_OS_Patching/Linux_Patching) | Ansible playbooks that automate patching for CentOS/RHEL and Debian/Ubuntu, plus pre-flight checks. |
 | [`Ansible_OS_Patching/Linux_Patching_group_by`](Ansible_OS_Patching/Linux_Patching_group_by) | Group-based variant of the Linux patching playbooks (CentOS/RHEL 7-9, Ubuntu 18.04/20.04), with a Jenkinsfile and wrapper scripts for check/apply runs. |
 | [`Ansible_OS_Patching/Windows_Patching`](Ansible_OS_Patching/Windows_Patching) | Ansible playbooks for patching Windows Server (security-only or full update rollups) over WinRM. |
@@ -18,19 +18,10 @@ A collection of DevOps automation and orchestration tooling, covering CI/CD on K
 
 The most involved piece of tooling here is the Jenkins-on-k3s stack — see [`K8s/jenkins-server/README.md`](K8s/jenkins-server/README.md) for full architecture, deployment order, and troubleshooting.
 
-Quick start via ArgoCD (GitOps):
-```bash
-# 1. Deploy cert-manager (must come first — Jenkins Ingress depends on its ClusterIssuer)
-kubectl apply -n argocd -f K8s/jenkins-server/cert-manager-argocd-application.yml
-
-# 2. Once cert-manager is healthy, deploy Jenkins
-kubectl apply -n argocd -f K8s/jenkins-server/jenkins-argocd-application.yml
-```
-
-Or standalone, without ArgoCD:
+Quick start:
 ```bash
 cd K8s/jenkins-server
-./deploy-certs.sh deploy
+./deploy-certs.sh deploy    # cert-manager must come first — Jenkins Ingress depends on its ClusterIssuer
 ./deploy-jenkins.sh deploy
 ```
 
