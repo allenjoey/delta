@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.38.0 (a8f5d1cbd)
+  labels:
+    io.kompose.service: jenkins-docker
+  name: jenkins-docker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: jenkins-docker
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml
+        kompose.version: 1.38.0 (a8f5d1cbd)
+      labels:
+        io.kompose.service: jenkins-docker
+    spec:
+      containers:
+        - args:
+            - --storage-driver
+            - overlay2
+          env:
+            - name: DOCKER_TLS_CERTDIR
+              value: /certs
+            - name: DOCKER_TLS_SAN
+              value: "DNS:jenkins-docker,DNS:localhost,IP:127.0.0.1"
+          image: docker:dind
+          name: jenkins-dind
+          ports:
+            - containerPort: 2376
+              protocol: TCP
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /certs/client
+              name: jenkins-docker-certs
+            - mountPath: /var/jenkins_home
+              name: jenkins-data
+      restartPolicy: Always
+      volumes:
+        - name: jenkins-docker-certs
+          persistentVolumeClaim:
+            claimName: jenkins-certs
+        - name: jenkins-data
+          persistentVolumeClaim:
+            claimName: jenkins-data

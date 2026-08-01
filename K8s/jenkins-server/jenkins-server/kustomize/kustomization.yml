@@ -1,0 +1,44 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: jenkins-server
+
+resources:
+  - jenkins-rbac.yml
+  - jenkins-docker-deployment.yml
+  - jenkins-deployment.yml
+  - jenkins-docker-service.yml
+  - jenkins-service.yml
+  - jenkins-data-pvc.yml
+  - jenkins-docker-certs-pvc.yml
+  - jenkins-ingress.yml
+
+patches:
+  - patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/resources
+        value:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+          limits:
+            cpu: "2"
+            memory: "2Gi"
+    target:
+      kind: Deployment
+
+  # Add serviceAccount to your deployment patch
+  - patch: |-
+      - op: add
+        path: /spec/template/spec/serviceAccountName
+        value: jenkins
+    target:
+      kind: Deployment
+
+labels:
+  - pairs:
+      app: jenkins
+      environment: development
+      managed-by: kustomize
+    includeSelectors: false

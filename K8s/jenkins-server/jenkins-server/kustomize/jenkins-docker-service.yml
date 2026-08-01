@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.38.0 (a8f5d1cbd)
+  labels:
+    io.kompose.service: jenkins-docker
+  name: jenkins-docker
+spec:
+  ports:
+    - name: "2376"
+      port: 2376
+      targetPort: 2376
+  selector:
+    io.kompose.service: jenkins-docker
