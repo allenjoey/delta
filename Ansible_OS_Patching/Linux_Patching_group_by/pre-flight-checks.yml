@@ -1,0 +1,27 @@
+---
+- name: Pre Flight Checks
+  hosts: '*'
+  become: true
+  gather_facts: true
+
+  tasks:
+  - name: Pre-flight system checks
+    block:
+      - name: Check disk space
+        shell: df -h / | tail -1 | awk '{print $5}' | sed 's/%//'
+        register: disk_usage
+      
+      - name: Fail if insufficient disk space
+        fail:
+          msg: "Insufficient disk space: {{ disk_usage.stdout }}% used"
+        when: disk_usage.stdout | int > 85
+      
+      - name: Check system load
+        shell: uptime | awk '{print $(NF-2)}' | sed 's/,//'
+        register: system_load
+      
+      - name: Warning for high system load
+        debug:
+          msg: "Warning: High system load detected: {{ system_load.stdout }}"
+        when: system_load.stdout | float > 2.0
+...

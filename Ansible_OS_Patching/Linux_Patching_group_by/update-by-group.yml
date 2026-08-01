@@ -1,0 +1,20 @@
+---
+# playbook uses a group_by keyword and sets the group by key to the operating system distribution.
+
+- name: Playbook to patch group_by module
+  hosts: '*'
+
+  tasks:
+    - name: Create inventory groups based on host facts
+      group_by:
+        key: os_{{ ansible_facts['pkg_mgr'] }}
+
+- name: Update-RHEL-7
+  ansible.builtin.import_playbook: ./plays/update-rhel7.yml
+
+- name: Update-RHEL9
+  ansible.builtin.import_playbook: ./plays/update-rhel9.yml
+
+- name: Update-Ubuntu
+  ansible.builtin.import_playbook: ./plays/update-ubuntu.yml
+...

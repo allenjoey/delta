@@ -1,0 +1,46 @@
+/* groovylint-disable-next-line CompileStatic */
+pipeline {
+    agent any
+
+    environment {
+        AN_DIR = 'Ansible/Ansible_OS_Patching/Linux_Patching_group_by'
+    }
+
+    stages {
+        stage('Verify Branch') {
+            steps {
+                // Better ways to get branch information
+                script {
+                    // Option 1: For multibranch pipeline
+                    echo "Branch: ${env.BRANCH_NAME}"
+
+                // Option 2: For regular pipeline jobs
+                // echo "Branch: ${env.GIT_BRANCH}"
+
+                // Option 3: Using sh/bat if git is available
+                // sh 'git rev-parse --abbrev-ref HEAD'
+                }
+            }
+        }
+        stage('Execute Ansible Playbook') {
+            steps {
+                // Use absolute path or ensure workspace is correct
+                dir("${WORKSPACE}/${env.AN_DIR}") {
+                    ansiblePlaybook credentialsId: 'private-key',
+                                 disableHostKeyChecking: true,
+                                 installation: 'Ansible',
+                                 inventory: 'inventory',
+                                 playbook: 'update-by-group.yml'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            step([$class: 'Mailer', 
+                  notifyEveryUnstableBuild: true,
+                  recipients: 'joey.allen@caramail.com'])
+        }
+    }
+}

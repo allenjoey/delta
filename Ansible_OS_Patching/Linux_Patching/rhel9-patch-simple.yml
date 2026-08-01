@@ -1,0 +1,23 @@
+---
+- name: RHEL 9 Minimal Patching
+  hosts: '*'
+  become: true
+  serial: 1 # Set a number of hosts you want to manage.
+  
+  tasks:
+    - name: Update all packages
+      ansible.builtin.dnf:
+        name: '*'
+        state: latest
+        update_cache: true
+      register: update_result
+      
+    - name: Reboot if packages were updated
+      ansible.builtin.reboot:
+        reboot_timeout: 300
+      when: update_result.changed
+      
+    - name: Confirm system is back online
+      debug:
+        msg: "{{ inventory_hostname }} patching completed successfully"
+...

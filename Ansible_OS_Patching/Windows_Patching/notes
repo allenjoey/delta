@@ -1,0 +1,4 @@
+Pass in the admin password 
+--extra-vars or -e "admin_password=Aa089147618!"
+
+Ansible Windows Ping # ansible '*' -m win_ping

@@ -1,0 +1,8 @@
+---
+# vars file for linux_patch
+
+vars:
+list_of_app_packages_rh9:
+  - nmap
+  - nginx
+  

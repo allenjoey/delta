@@ -1,0 +1,30 @@
+---
+    - name: upgrade all packages dnf module
+      ansible.builtin.dnf:
+        name: '*' 
+        update_cache: true
+        state: latest
+        lock_timeout: 240
+      tags: app_dnf_packages
+      register: dnf_update_status
+      when:
+        - ansible_distribution == "Rocky"
+        - ansible_distribution_major_version == "9"
+
+    - name: Install any extra packages related to applications
+      ansible.builtin.package:
+        name: "{{ list_of_app_packages_rh9 }}"
+        state: present
+      tags: app_dnf_packages
+
+    - name: Reboot machine and send a message      
+      ansible.builtin.reboot:      
+        reboot:
+          msg: "Reboot initiated by Ansible for kernel updates"
+          connect_timeout: 5
+          reboot_timeout: 300
+          pre_reboot_delay: 0
+          post_reboot_delay: 30
+          test_command: uptime        
+      when: dnf_update_status.changed    
+...

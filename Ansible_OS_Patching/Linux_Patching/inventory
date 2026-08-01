@@ -1,0 +1,13 @@
+[local]
+localhost ansible_connection=local
+
+[webservers]
+web1.example.com ansible_host=192.168.1.10
+web2.example.com ansible_host=192.168.1.11
+
+[dbservers]
+db1.example.com ansible_host=192.168.1.20
+
+[all:vars]
+ansible_user=ubuntu
+ansible_ssh_private_key_file=~/.ssh/id_rsa

@@ -1,0 +1,6 @@
+- hosts: '*'
+  become: true
+  
+  roles:
+    - role: updates
+...      
