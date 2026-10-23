@@ -97,7 +97,7 @@ aws configure sso --use-device-code
 
 | Prompt | Value |
 |--------|-------|
-| SSO session name | `cloudsecure` |
+| SSO session name | `session-name` |
 | SSO start URL | the access portal URL |
 | SSO region | `eu-west-2` |
 | Scopes | default (`sso:account:access`) |
