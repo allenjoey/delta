@@ -109,7 +109,7 @@ Then:
 3. Default region `eu-west-2`, output `json`.
 4. Give the profile a clear name such as `coder-demo`.
 
-If you have set up the session before, enter the same SSO session name (`cloudsecure`). It reuses the saved start URL and region, and you may be asked to approve in the browser again.
+If you have set up the session before, enter the same SSO session name (`session-name`). It reuses the saved start URL and region, and you may be asked to approve in the browser again.
 
 > A plain `aws configure sso` fails in the workspace because the `127.0.0.1` redirect points at your own machine, not the workspace. Always use `--use-device-code`. The script already does this when it logs in for you.
 
